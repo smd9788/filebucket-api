@@ -17,11 +17,11 @@ const uploadSchema = new mongoose.Schema({
   },
   dateCreated: {
     type: Date,
-    required: true
+    required: false
   },
   dateModified: {
     type: Date,
-    required: true
+    required: false
   },
   title: {
     type: String,
