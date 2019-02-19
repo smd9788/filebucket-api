@@ -62,6 +62,11 @@ app.use((req, res, next) => {
   next()
 })
 
+// app.use((req, res, next) => {
+//   console.log('incoming req is,', req)
+//   next()
+// })
+
 // register passport authentication middleware
 app.use(auth)
 
