@@ -68,6 +68,7 @@ router.delete('/uploads/:id', requireToken, (req, res, next) => {
   Upload.findById(req.params.id)
     .then(handle404)
     .then(upload => {
+      requireOwnership(req, upload)
       upload.remove()
     })
     .then(() => res.sendStatus(204))
