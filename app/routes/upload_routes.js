@@ -13,7 +13,7 @@ const requireToken = passport.authenticate('bearer', { session: false })
 
 // INDEX
 // GET /uploads
-router.get('/uploads', (req, res, next) => {
+router.get('/uploads', requireToken, (req, res, next) => {
   Upload.find()
     .then(uploads => {
       return uploads.map(upload => upload.toObject())
@@ -24,7 +24,7 @@ router.get('/uploads', (req, res, next) => {
 
 // SHOW
 // GET /uploads/5a7db6c74d55bc51bdf39793
-router.get('/uploads/:id', (req, res, next) => {
+router.get('/uploads/:id', requireToken, (req, res, next) => {
   Upload.findById(req.params.id)
     .then(handle404)
     .then(upload => res.status(200).json({ upload: upload.toObject() }))
@@ -36,9 +36,10 @@ router.get('/uploads/:id', (req, res, next) => {
 router.post('/uploads', requireToken, upload.single('image'), (req, res, next) => {
   const owner = req.user.id
   const metaTitle = req.body.title
+  const tag = req.body.tag
   promiseUpload(req)
     .then(response => {
-      return Upload.create({url: response.Location, title: metaTitle, owner: owner})
+      return Upload.create({url: response.Location, title: metaTitle, tag: tag, owner: owner})
     })
     .then(newUpload => {
       res.status(201).json({ upload: newUpload.toObject() })
@@ -48,7 +49,7 @@ router.post('/uploads', requireToken, upload.single('image'), (req, res, next) =
 
 // UPDATE
 // PATCH /uploads/5a7db6c74d55bc51bdf39793
-router.patch('/uploads/:id', removeBlanks, (req, res, next) => {
+router.patch('/uploads/:id', requireToken, removeBlanks, (req, res, next) => {
   delete req.body.upload.owner
 
   Upload.findById(req.params.id)
