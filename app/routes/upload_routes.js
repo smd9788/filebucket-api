@@ -14,7 +14,7 @@ const requireToken = passport.authenticate('bearer', { session: false })
 // INDEX
 // GET /uploads
 router.get('/uploads', requireToken, (req, res, next) => {
-  Upload.find()
+  Upload.find({'owner': req.user.id})
     .then(uploads => {
       return uploads.map(upload => upload.toObject())
     })
