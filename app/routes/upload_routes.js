@@ -63,10 +63,11 @@ router.patch('/uploads/:id', removeBlanks, (req, res, next) => {
 
 // DESTROY
 // DELETE /uploads/5a7db6c74d55bc51bdf39793
-router.delete('/uploads/:id', (req, res, next) => {
+router.delete('/uploads/:id', requireToken, (req, res, next) => {
   Upload.findById(req.params.id)
     .then(handle404)
     .then(upload => {
+      requireOwnership(req, upload)
       upload.remove()
     })
     .then(() => res.sendStatus(204))
