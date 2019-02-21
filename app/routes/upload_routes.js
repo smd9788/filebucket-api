@@ -11,9 +11,19 @@ const promiseUpload = require('../../lib/s3uploadPromise.js')
 const passport = require('passport')
 const requireToken = passport.authenticate('bearer', { session: false })
 
-// INDEX
+// INDEX ALL
 // GET /uploads
 router.get('/uploads', requireToken, (req, res, next) => {
+  Upload.find()
+    .then(uploads => {
+      return uploads.map(upload => upload.toObject())
+    })
+    .then(uploads => res.status(200).json({ uploads: uploads }))
+    .catch(next)
+})
+
+// INDEX ALL USER OWNED
+router.get('/uploads/all', requireToken, (req, res, next) => {
   Upload.find({'owner': req.user.id})
     .then(uploads => {
       return uploads.map(upload => upload.toObject())
