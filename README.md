@@ -134,4 +134,5 @@ Update get image route
     - `git push heroku master`
 
 ### Unsolved Problems and Future Work
-* Fix AWS deployment issue
+* Format timestamp for time zone and remove minutes/seconds
+* When uploading photo, display in card instead of full size
